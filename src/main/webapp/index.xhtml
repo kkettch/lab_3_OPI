@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+    <title>Start page</title>
+    <h:outputStylesheet library="css" name="style.css"/>
+    <h:outputScript library="js" name="clock.js"/>
+</h:head>
+
+<h:body>
+
+    <!--часы-->
+    <div class="clockpage">
+        <div id="clock"></div>
+        <div id="dayOfWeek"></div>
+    </div>
+
+    <div class="hero-container">
+        <h1>Добро пожаловать на страницу </h1>
+        <h1>проверки координат точки!</h1>
+        <p>
+            Для начала использования страницы нажмите на кнопку!
+        </p>
+        <h:button class="start_button" outcome="toMain" value="Проверить"/>
+    </div>
+
+</h:body>
+
+</html>

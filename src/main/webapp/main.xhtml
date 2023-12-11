@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head>
+
+    <title>Web-3 Project</title>
+    <h:outputStylesheet library="css" name="style.css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/images/favicon.jpg"/>
+
+</h:head>
+
+<h:body onload="firstUpdateList()">
+
+    <!--шапка странички-->
+    <header>
+        <section class="header">
+            <div id="name">Чмурова Мария Владиславовна</div>
+            <div id="group">P3232</div>
+            <div id="variant">v:121212</div>
+            <h:form>
+                <h:commandLink action="toIndex">
+                    <h:graphicImage library="images" name="home.png" alt="Home Button Image" width="40" height="40"/>
+                </h:commandLink>
+            </h:form>
+        </section>
+    </header>
+
+    <!--данные (все кроме таблицы)-->
+    <div style="float: left">
+
+        <!--график-->
+        <div class="image">
+            <canvas id="canvas" width="480" height="320"/>
+        </div>
+
+        <!--координаты-->
+        <h:form id="form" onsubmit="return validateAndSubmit()">
+            <div class="coordinates">
+                <!--координата X-->
+                <h:outputLabel>Выберите значение X:</h:outputLabel><br/>
+                <div class="buttonX">
+                    <h:commandButton value="-4" action="#{pointBean.point.setX(-4)}" styleClass="btnX" required="true">
+                        <f:ajax/>
+                    </h:commandButton>
+                    <h:commandButton value="-3" action="#{pointBean.point.setX(-3)}" styleClass="btnX" required="true">
+                        <f:ajax/>
+                    </h:commandButton>
+                    <h:commandButton value="-2" action="#{pointBean.point.setX(-2)}" styleClass="btnX" required="true">
+                        <f:ajax/>
+                    </h:commandButton>
+                    <h:commandButton value="-1" action="#{pointBean.point.setX(-1)}" styleClass="btnX" required="true">
+                        <f:ajax/>
+                    </h:commandButton>
+                    <h:commandButton value="0" action="#{pointBean.point.setX(0)}" styleClass="btnX" required="true">
+                        <f:ajax/>
+                    </h:commandButton>
+                    <h:commandButton value="1" action="#{pointBean.point.setX(1)}" styleClass="btnX" required="true">
+                        <f:ajax/>
+                    </h:commandButton>
+                    <h:commandButton value="2" action="#{pointBean.point.setX(2)}" styleClass="btnX" required="true">
+                        <f:ajax/>
+                    </h:commandButton>
+                </div>
+
+                <!--координата Y-->
+                <h:outputLabel>Введите Y в диапазоне (-3; 3):</h:outputLabel><br/>
+                <h:inputText id="Y-value" styleClass="y-value" value="#{pointBean.point.y}" required="true"
+                             requiredMessage="Введите Y" validatorMessage="Не входит в [-3..3]"
+                             converterMessage="Введите число" maxlength="5">
+                    <f:validateDoubleRange minimum="-3" maximum="3"/>
+                    <f:ajax render="Y-value-message"/>
+                </h:inputText>
+                <h:message id="Y-value-message" for="Y-value" styleClass="error"/><br/>
+
+                <!--координата R-->
+                <h:outputLabel>Выберите значение R:</h:outputLabel><br/>
+                <p:slider id="slider" for="rr" display="output" widgetVar="mySlider" minValue="2" maxValue="5" range="1" step="0.25"
+                          displayTemplate="Выбранное значение: {value}" onSlide="beforeDraw(ui.value)"/>
+                <h:inputHidden id="rr" value="#{pointBean.point.r}"/>
+                <f:ajax event="click" render="myForm"/>
+                <h:outputText id="output" value="Выбранное значение: " styleClass="r-value"/>
+
+                <!--сообщение об ошибке-->
+                <p id="error_message"/>
+            </div>
+            <div id="button-container">
+                <!--кнопка "проверить"-->
+                <h:commandButton type="submit" id="checking" styleClass="checking" value="Проверить"
+                                 action="#{pointBean.add()}">
+                    <f:ajax render="results myForm"/>
+                </h:commandButton>
+
+                <!--кнопка "очистить таблицу"-->
+                <h:commandButton type="button" id="clearing" styleClass="clearing" value="Очистить"
+                                 action="#{pointBean.clear()}">
+                    <f:ajax render="results myForm"/>
+                </h:commandButton>
+            </div>
+        </h:form>
+    </div>
+
+    <div style="float: right">
+        <div id="table-container">
+            <h:dataTable id="results" var="point" styleClass="table" value="#{pointBean.pointsList}">
+                <h:column>
+                    <f:facet name="header">X</f:facet>
+                    <h:outputText id="x" value="#{point.x}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Y</f:facet>
+                    <h:outputText id="y" value="#{point.y}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">R</f:facet>
+                    <h:outputText id="r" value="#{point.r}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Текущее время</f:facet>
+                    <h:outputText id="time" value="#{point.time}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Время работы</f:facet>
+                    <h:outputText id="script-time" value="#{point.scriptTime}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Результат</f:facet>
+                    <h:outputText id="status" value="#{point.status}"/>
+                </h:column>
+            </h:dataTable>
+        </div>
+    </div>
+
+    <h:form id="myForm">
+        <h:inputHidden id="xValue" value="#{pointBean.point.x}">
+        </h:inputHidden>
+        <h:inputHidden id="yValue" value="#{pointBean.point.y}">
+        </h:inputHidden>
+        <h:inputHidden id="rValue" value="#{pointBean.point.r}">
+        </h:inputHidden>
+        <h:inputHidden id="points" value="#{pointBean.pointsJson}">
+        </h:inputHidden>
+    </h:form>
+
+    <h:outputScript type="text/javascript">
+        function beforeDraw(val) {
+            let pointsJson= document.getElementById('myForm:points').value;
+            let points = JSON.parse(pointsJson);
+            draw(val, points);
+        }
+    </h:outputScript>
+
+    <h:outputScript type="text/javascript">
+
+        function firstUpdateList() {
+            let pointsJson= document.getElementById('myForm:points').value;
+            let rValue= document.getElementById('myForm:rValue').value;
+            let points = JSON.parse(pointsJson);
+            draw(rValue,points);
+        }
+
+    </h:outputScript>
+
+    <h:outputScript type="text/javascript">
+        function sendData(x,y) {
+            document.getElementById('myForm:xValue').value = x;
+            document.getElementById('myForm:yValue').value = y;
+
+            faces.ajax.request('myForm', null, {
+                execute: 'myForm',
+                render: 'results',
+                onevent: function (data) {
+                    if (data.status === 'success') {
+                        document.getElementById('form:checking').click();
+                        setTimeout(function() {
+                            firstUpdateList();
+                        }, 200);
+
+                    }
+                }
+            });
+        }
+        document.getElementById("form:clearing").addEventListener("click",function () {
+            setTimeout(function() {
+                firstUpdateList();
+            }, 200);
+        });
+        document.getElementById("form:checking").addEventListener("click",function () {
+            setTimeout(function() {
+                firstUpdateList();
+            }, 200);
+        });
+    </h:outputScript>
+
+</h:body>
+
+<h:outputScript library="js" name="draw.js"/>
+<h:outputScript library="js" name="checkbox.js"/>
+<h:outputScript library="js" name="check.js"/>
+
+</html>
