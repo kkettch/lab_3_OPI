@@ -70,10 +70,11 @@
 
                 <!--координата Y-->
                 <h:outputLabel>Введите Y в диапазоне (-3; 3):</h:outputLabel><br/>
-                <h:inputText id="Y-value" styleClass="y-value" value="#{pointBean.point.y}" required="true"
+                <h:inputText id="Y-value" name="Y-value" styleClass="y-value" value="#{pointBean.point.y}" required="true"
                              requiredMessage="Введите Y" validatorMessage="Не входит в [-3..3]"
                              converterMessage="Введите число" maxlength="5">
-                    <f:validateDoubleRange minimum="-3" maximum="3"/>
+                    <f:validateDoubleRange for="Y-value" minimum="-3" maximum="3"/>
+                    <f:validateRequired />
                     <f:ajax render="Y-value-message"/>
                 </h:inputText>
                 <h:message id="Y-value-message" for="Y-value" styleClass="error"/><br/>
@@ -89,6 +90,7 @@
                 <!--сообщение об ошибке-->
                 <p id="error_message"/>
             </div>
+
             <div id="button-container">
                 <!--кнопка "проверить"-->
                 <h:commandButton type="submit" id="checking" styleClass="checking" value="Проверить"
@@ -102,9 +104,11 @@
                     <f:ajax render="results myForm"/>
                 </h:commandButton>
             </div>
+
         </h:form>
     </div>
 
+    <!--таблица-->
     <div style="float: right">
         <div id="table-container">
             <h:dataTable id="results" var="point" styleClass="table" value="#{pointBean.pointsList}">
@@ -148,11 +152,13 @@
     </h:form>
 
     <h:outputScript type="text/javascript">
+
         function beforeDraw(val) {
             let pointsJson= document.getElementById('myForm:points').value;
             let points = JSON.parse(pointsJson);
             draw(val, points);
         }
+
     </h:outputScript>
 
     <h:outputScript type="text/javascript">
@@ -200,7 +206,6 @@
 </h:body>
 
 <h:outputScript library="js" name="draw.js"/>
-<h:outputScript library="js" name="checkbox.js"/>
-<h:outputScript library="js" name="check.js"/>
+<h:outputScript library="js" name="button.js"/>
 
 </html>

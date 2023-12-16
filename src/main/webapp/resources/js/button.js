@@ -1,4 +1,4 @@
-//checkbox.js проверяет, что чможно выбрать только один чекбокс, при выборе второго галочка с первого снимается
+//button.js проверяет, что чможно выбрать только один чекбокс, при выборе второго галочка с первого снимается
 
 document.addEventListener("DOMContentLoaded", function () {
     const btnXElements = document.querySelectorAll(".btnX");

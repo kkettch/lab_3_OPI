@@ -21,14 +21,22 @@ public class PointsBDManager implements Serializable {
     public PointsBDManager()
     {
         connection();
-        loadPoints();
+        getFromBD();
     }
+
+    /**
+     * Соединение с базой данных
+     */
     private void connection(){
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
         entityManager = entityManagerFactory.createEntityManager();
         transaction=entityManager.getTransaction();
     }
-    public List loadPoints() {
+
+    /**
+     * Получение точек из БД
+     */
+    public List getFromBD() {
         try {
             transaction.begin();
             Query query = entityManager.createQuery("select points from Point points");
@@ -43,7 +51,10 @@ public class PointsBDManager implements Serializable {
         }
     }
 
-    public void savePoint(Point point){
+    /**
+     * Сохранение точки в БД
+     */
+    public void addToBD(Point point){
         try {
             transaction.begin();
             entityManager.persist(point);
@@ -56,7 +67,10 @@ public class PointsBDManager implements Serializable {
         }
     }
 
-    public void clearPoints() {
+    /**
+     * Удаление всех точек из БД
+     */
+    public void clearBD() {
         try {
             transaction.begin();
             Query query = entityManager.createQuery("delete from Point");

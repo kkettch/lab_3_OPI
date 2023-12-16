@@ -1,6 +1,5 @@
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.enterprise.inject.Model;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,9 +34,12 @@ public class PointBean implements Serializable {
     public PointBean() {
         point = new Point();
         pointsBDManager = new PointsBDManager();
-        pointsList = Collections.synchronizedList(pointsBDManager.loadPoints());
+        pointsList = Collections.synchronizedList(pointsBDManager.getFromBD());
     }
 
+    /**
+     * Добавлние точки
+     */
     public synchronized void add(){
         System.out.println("add");
         long timer = System.nanoTime();
@@ -49,7 +51,7 @@ public class PointBean implements Serializable {
         point.setScriptTime((long) ((System.nanoTime() - timer) * 0.001));
 
         pointsList.add(point);
-        pointsBDManager.savePoint(point);
+        pointsBDManager.addToBD(point);
 
         lastPoint = point;
         point = new Point();
@@ -58,17 +60,23 @@ public class PointBean implements Serializable {
         point.setR(lastPoint.getR());
 
     }
-    public synchronized List<Point> getPointsList() {
-        return pointsList;
-    }
 
+    /**
+     * Удаление всех точек
+     */
     public String clear(){
         System.out.println("clear");
         pointsList = Collections.synchronizedList(new LinkedList<>());
-        pointsBDManager.clearPoints();
+        pointsBDManager.clearBD();
         return null;
     }
 
+    /**
+     * Получение листа со значениями точек
+     */
+    public synchronized List<Point> getPointsList() {
+        return pointsList;
+    }
     public String getPointsJson() {
         return pointsList.stream()
                 .map(Point::toJSON)
