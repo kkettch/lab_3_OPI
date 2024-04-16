@@ -8,10 +8,10 @@ public class AreaChecker {
     /**
      * Метод для проверки на попадание в область
      */
-    public static boolean isHit(Point point) {
-        double x = point.getX();
-        double y = point.getY();
-        double r = point.getR();
+    public static boolean isHit(double x, double y, double r) {
+//        double x = point.getX();
+//        double y = point.getY();
+//        double r = point.getR();
 
         return (isCircleZone(x, y, r) || isTriangleZone(x, y, r) || isRectangleZone(x, y, r));
     }
