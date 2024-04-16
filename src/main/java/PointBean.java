@@ -46,7 +46,7 @@ public class PointBean implements Serializable {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         String currentTime = formatter.format(LocalDateTime.now().minusMinutes(getTimezone()));
 
-        point.setStatus(AreaChecker.isHit(point));
+        point.setStatus(AreaChecker.isHit(point.getX(), point.getY(), point.getR()));
         point.setTime(currentTime);
         point.setScriptTime((long) ((System.nanoTime() - timer) * 0.001));
 
