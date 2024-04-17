@@ -29,6 +29,7 @@ public class AreaChecker {
      * Произошло ли попадание в треугольник
      */
     private static boolean isTriangleZone(double x, double y, double r) {
+
         return y <= x / 2 + r / 2 && y >= 0 && x <= 0;
     }
 
