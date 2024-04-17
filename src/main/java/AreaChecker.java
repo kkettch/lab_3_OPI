@@ -13,7 +13,7 @@ public class AreaChecker {
 //        double y = point.getY();
 //        double r = point.getR();
 
-        return (isCircleZone(x, y, r) || isTriangleZone(x, y, r) || isRectangleZone(x, y, r))
+        return (isCircleZone(x, y, r) || isTriangleZone(x, y, r) || isRectangleZone(x, y, r));
     }
 
     /**
