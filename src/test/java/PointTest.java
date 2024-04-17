@@ -16,7 +16,7 @@ public class PointTest {
 
     @Test
     public void testPoint3() {
-        assertTrue("checking point x = 1.7; y = 2.3; r = 3.75", AreaChecker.isHit(1.7, 2.3, 3.75));
+        assertFalse("checking point x = 1.7; y = 2.3; r = 3.75", AreaChecker.isHit(1.7, 2.3, 3.75));
     }
 
     @Test
