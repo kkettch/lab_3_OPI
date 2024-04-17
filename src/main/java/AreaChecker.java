@@ -22,6 +22,7 @@ public class AreaChecker {
      */
     private static boolean isRectangleZone(double x, double y, double r) {
         return x >= -r && x <= 0 && y >= -r / 2 && y <= 0;
+
     }
 
     /**
