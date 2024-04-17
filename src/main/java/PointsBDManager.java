@@ -14,6 +14,7 @@ import java.util.List;
 @SessionScoped
 public class PointsBDManager implements Serializable {
 
+
     private EntityManager entityManager;
     private EntityTransaction transaction;
     private static final String PERSISTENCE_UNIT_NAME = "WebLab";
