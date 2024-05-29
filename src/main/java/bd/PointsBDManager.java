@@ -1,9 +1,13 @@
+package bd;
+
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Named;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.List;
+import point.Point;
 
 /**
  * Класс предназначен для работы с БД
@@ -11,7 +15,7 @@ import java.util.List;
  */
 
 @Named
-@SessionScoped
+@ApplicationScoped
 public class PointsBDManager implements Serializable {
 
 
@@ -84,4 +88,70 @@ public class PointsBDManager implements Serializable {
             }
         }
     }
+
+    /**
+     * Получение всех точек из БД
+     *
+     * @return список всех точек
+     */
+    public List<Point> getAllPoints() {
+        try {
+            transaction.begin();
+            List<Point> points = entityManager.createQuery("SELECT p FROM Point p", Point.class).getResultList();
+            transaction.commit();
+            return points;
+        } catch (RuntimeException exception) {
+            System.out.println("error:" + exception.getMessage());
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw exception;
+        }
+    }
+
+    /**
+     * Получение последних number точек из БД
+     *
+     * @param number количество точек
+     * @return список последних точек
+     */
+    public List<Point> getLastPoints(int number) {
+        try {
+            transaction.begin();
+            List<Point> points = entityManager.createQuery("SELECT p FROM Point p ORDER BY p.id DESC", Point.class)
+                    .setMaxResults(number)
+                    .getResultList();
+            transaction.commit();
+            return points;
+        } catch (RuntimeException exception) {
+            System.out.println("error:" + exception.getMessage());
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw exception;
+        }
+    }
+
+    /**
+     * Получение неудачных точек из БД
+     *
+     * @return список неудачных точек
+     */
+    public List<Point> getFailedPoints() {
+        try {
+            transaction.begin();
+            List<Point> failedPoints = entityManager.createQuery("SELECT p FROM Point p WHERE p.status = :status", Point.class)
+                    .setParameter("status", false)
+                    .getResultList();
+            transaction.commit();
+            return failedPoints;
+        } catch (RuntimeException exception) {
+            System.out.println("error:" + exception.getMessage());
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw exception;
+        }
+    }
+
 }

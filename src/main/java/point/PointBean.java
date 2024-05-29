@@ -1,3 +1,8 @@
+package point;
+
+import area.AreaChecker;
+import bd.PointsBDManager;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.enterprise.inject.Model;
 import jakarta.inject.Named;
@@ -22,7 +27,7 @@ import java.util.List;
 @Getter
 @Named("pointBean")
 @Model
-@SessionScoped
+@ApplicationScoped
 public class PointBean implements Serializable {
     private Point point;
     private final PointsBDManager pointsBDManager;
